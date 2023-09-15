@@ -19,22 +19,22 @@ export class HttpClient implements HttpClientInterface {
     return parsedResponse;
   }
 
-  async post(path: string, params: any, isFormData = false): Promise<any> {
+  async post(path: string, params: any): Promise<any> {
     const response = await fetch(`${BASE_URL}/${path}`, {
       method: "POST",
-      headers: new Headers({ ...this.getAuthHeaders(isFormData) }),
-      body: isFormData ? params : JSON.stringify({ ...params }),
+      headers: new Headers({ ...this.getAuthHeaders() }),
+      body: JSON.stringify({ ...params }),
     });
     const parsedResponse = await response.json();
 
     return parsedResponse;
   }
 
-  async put(path: string, params: any, isFormData = false): Promise<any> {
+  async put(path: string, params: any): Promise<any> {
     const response = await fetch(`${BASE_URL}/${path}`, {
       method: "PUT",
-      headers: new Headers({ ...this.getAuthHeaders(isFormData) }),
-      body: isFormData ? params : JSON.stringify({ ...params }),
+      headers: new Headers({ ...this.getAuthHeaders() }),
+      body: JSON.stringify({ ...params }),
     });
     const parsedResponse = await response.json();
 
@@ -60,15 +60,11 @@ export class HttpClient implements HttpClientInterface {
     return parsedResponse;
   }
 
-  private getAuthHeaders(isFormData = false): any {
+  private getAuthHeaders(): any {
     const headers: any = {
       Authorization: `Bearer ${localStorageUtils.getToken()}`,
       Accept: "application.json",
     };
-
-    if (!isFormData) {
-      headers["Content-Type"] = "application/json";
-    }
 
     return headers;
   }
